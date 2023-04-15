@@ -3,6 +3,7 @@ from flask import jsonify, request, make_response, abort, url_for   # noqa; F401
 from service.common import status  # HTTP Status Codes
 from service.models import TankCommand
 from . import app  # Import Flask application
+from . import tracks
 
 @app.route("/health")
 def health():
@@ -27,6 +28,14 @@ def move_tank():
     command = TankCommand()
     command.deserialize(request.get_json())
     # try to execute the command here...
+    if command.left:
+        tracks.leftTrack(command.left)
+    else:
+        tracks.leftTrack()
+    if command.right:
+        tracks.rightTrack(command.right)
+    else:
+        tracks.rightTrack()
     command.passphrase = None
     app.logger.info(command.serialize())
     command.clear()
