@@ -27,11 +27,11 @@ def move_tank():
     command = TankCommand()
     command.deserialize(request.get_json())
     # try to execute the command here...
-    
+    command.passphrase = None
+    app.logger.info(command.serialize())
     command.clear()
     command.status = "Executed"
     reply = command.serialize()
-    app.logger.debug(reply)
     location_url = "/execute"
     return make_response(
         jsonify(reply), status.HTTP_202_ACCEPTED, {"Location": location_url}
